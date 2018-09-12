@@ -4,9 +4,11 @@
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 自动聚焦权限 -->
     <uses-permission android:name="android.permission.VIBRATE" /> <!-- 震动权限 -->
+
 
     <application
         android:allowBackup="true"
@@ -29,27 +31,25 @@
 
         <activity android:name=".ui.BorrowActivity" />
         <activity android:name=".ui.ReturnActivity" />
-        <activity android:name=".ui.SearchActivity"/>
-        <activity android:name=".ui.SubscribeActivity">
-        </activity>
+        <activity android:name=".ui.SearchActivity" />
+        <activity android:name=".ui.SubscribeActivity"></activity>
 
         <service
             android:name=".ui.AutoService"
-
-            android:process="system"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            android:process="system">
             <intent-filter>
-                <action android:name="android.intent.action.RESPOND_VIA_MESSAGE"  />
-
+                <action android:name="android.intent.action.RESPOND_VIA_MESSAGE" />
             </intent-filter>
         </service>
 
         <receiver
             android:name=".ui.AutoReceiver"
             android:enabled="true"
-            android:exported="true">
-        </receiver>
+            android:exported="true"></receiver>
+
+        <activity android:name=".ui.CancelSubscriptionActivity"></activity>
     </application>
 
 </manifest>

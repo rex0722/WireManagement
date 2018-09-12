@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -144,29 +143,15 @@ import java.util.Calendar;
             SpeechSynthesis.textToSpeech.speak(getString(R.string.dialog_message_no_data),TextToSpeech.QUEUE_FLUSH, null );
         } else {
 
-            if (fromActivity.equals(StatusDefinition.FUNCTION_SELECT))
-                itemName = spnSubscribeItem.getSelectedItem().toString();
-            else
-                itemName = itemEdt.getText().toString();
+            if (checkReturnDateLaterThanBorrowDate(borCalendar.getTime().getTime(), retCalendar.getTime().getTime())){
+                if (fromActivity.equals(StatusDefinition.FUNCTION_SELECT))
+                    itemName = spnSubscribeItem.getSelectedItem().toString();
+                else
+                    itemName = itemEdt.getText().toString();
 
-            Log.w("TAG", "borCalendar:" + dateFormat.format(borCalendar.getTime().getTime()) + "\n" +
-                                    "retCalendar:" + dateFormat.format(retCalendar.getTime().getTime()));
-            writer.writeSubscriptionDataToDatabase(
-                    dateEdt.getText().toString(),
-                    subDateEdt.getText().toString(),
-                    nameEdt.getText().toString(),
-                    itemName,
-                    borCalendar.getTime().getTime(),
-                    retCalendar.getTime().getTime()
-            );
-
-            Toast.makeText(SubscribeActivity.this, dialogSuccessMessage, Toast.LENGTH_LONG).show();
-
-            SpeechSynthesis.textToSpeech.speak(dialogSuccessMessage, TextToSpeech.QUEUE_FLUSH, null);
-//            dateEdt.setText(dateFormat.format(date.getTime()));
-//            subDateEdt.setText(dateFormat.format(date.getTime()));//waiting for API
-            itemEdt.setText("");
-            reader.checkSubscribeItem();
+                reader.checkSubscribeDate(itemName);
+            }else
+                Toast.makeText(SubscribeActivity.this, getString(R.string.dialog_message_return_date_earlier_than_borrow_date), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -297,18 +282,52 @@ import java.util.Calendar;
 
         if(itemList.length == 0){
             new AlertDialog.Builder(this).setTitle(R.string.dialog_title_inform).
-                        setMessage(R.string.dialog_message_no_item_can_subscribe).
+                        setMessage(R.string.dialog_message_nothing_can_subscribe).
                         setPositiveButton(R.string.dialog_button_check, (DialogInterface dialog, int which) -> {
                             finish();
                         }).show();
         }else {
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_setting, itemList);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_setting, itemList);
             spnSubscribeItem.setAdapter(adapter);
         }
 
     }
 
-    private class StatusBroadcast extends BroadcastReceiver {
+    @Override
+    public void checkItemEstimatedTimeReturn(Long estimatedTimeReturnNum) {
+        if (estimatedTimeReturnNum < borCalendar.getTime().getTime()){
+            Log.w("TAG", "borCalendar:" + dateFormat.format(borCalendar.getTime().getTime()) + "\n" +
+                    "retCalendar:" + dateFormat.format(retCalendar.getTime().getTime()));
+            writer.writeSubscriptionDataToDatabase(
+                    dateEdt.getText().toString(),
+                    subDateEdt.getText().toString(),
+                    nameEdt.getText().toString(),
+                    itemName,
+                    borCalendar.getTime().getTime(),
+                    retCalendar.getTime().getTime()
+            );
+
+            Toast.makeText(SubscribeActivity.this, dialogSuccessMessage, Toast.LENGTH_LONG).show();
+
+            SpeechSynthesis.textToSpeech.speak(dialogSuccessMessage, TextToSpeech.QUEUE_FLUSH, null);
+//            dateEdt.setText(dateFormat.format(date.getTime()));
+//            subDateEdt.setText(dateFormat.format(date.getTime()));//waiting for API
+            itemEdt.setText("");
+            reader.checkSubscribeItem();
+        }else {
+            String message = itemName + getString(R.string.dialog_message_subscribe_date_error1) +
+                            dateFormat.format(estimatedTimeReturnNum) +
+                            getString(R.string.dialog_message_subscribe_date_error2);
+
+            Toast.makeText(SubscribeActivity.this, message, Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private boolean checkReturnDateLaterThanBorrowDate(Long borrowDate, Long returnDate){
+        return borrowDate <= returnDate;
+    }
+
+        private class StatusBroadcast extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
 

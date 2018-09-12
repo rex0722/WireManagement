@@ -3,10 +3,11 @@
     <string name="who_are_you">Who are you???</string>
     <string name="i_am">I am</string>
     <string name="you_want_to">You want to</string>
-    <string name="borrow">借用</string>
-    <string name="back">歸還</string>
-    <string name="search">查詢</string>
-    <string name="subscribe">預約</string>
+    <string name="btn_text_borrow">借用</string>
+    <string name="btn_text_back">歸還</string>
+    <string name="btn_text_search">查詢</string>
+    <string name="btn_text_subscription">預約</string>
+    <string name="btn_text_cancel_subscription">取消預約</string>
     <string name="date">歸還日期</string>
     <string name="subdate">預約日期</string>
     <string name="borrow_date">借用日期</string>
@@ -41,7 +42,11 @@
     <string name="dialog_message_return_user_error">不是你借用的\n不可以幫別人歸還!!!!</string>
     <string name="dialog_message_subscribe_user_error">當前時間內無法預約!!!!</string>
     <string name="dialog_message_not_subscriber">已有人預約，您不是預約者</string>
-    <string name="dialog_message_no_item_can_subscribe">目前沒有線材可以預約</string>
+    <string name="dialog_message_nothing_can_subscribe">目前沒有線材可以預約</string>
+    <string name="dialog_message_nothing_can_cancel_subscription">您沒有任何預約項目可以取消</string>
+    <string name="dialog_message_return_date_earlier_than_borrow_date">歸還時間不可以早於借用時間</string>
+    <string name="dialog_message_subscribe_date_error1">的預計歸還時間為:</string>
+    <string name="dialog_message_subscribe_date_error2">\n您預約借用的時間此項目尚未歸還，請另選其他時間。</string>
 
     <string-array name="search_type">
         <item>品項</item>

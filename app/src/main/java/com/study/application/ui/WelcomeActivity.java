@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.study.application.R;
+import com.study.application.leanCloud.Reader;
 import com.study.application.speech.SpeechSynthesis;
 
 public class WelcomeActivity extends AppCompatActivity {
@@ -48,6 +49,9 @@ public class WelcomeActivity extends AppCompatActivity {
         setWelcomeTxt();
         setUserImg();
         setCounter();
+
+        /* Read ObjectId from database */
+        Reader.setObjectID();
     }
 
     private void initView() {

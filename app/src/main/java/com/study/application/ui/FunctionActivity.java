@@ -62,6 +62,7 @@ public class FunctionActivity extends AppCompatActivity {
         Button returnBtn = findViewById(R.id.returnedBtn);
         Button searchBtn = findViewById(R.id.searchedBtn);
         Button subscribeBtn = findViewById(R.id.subscribeBtn);
+        Button cancelSubscriptionBtn = findViewById(R.id.cancelSubscriptionBtn);
 
         Button.OnClickListener listener = view -> {
 
@@ -78,6 +79,9 @@ public class FunctionActivity extends AppCompatActivity {
                 case R.id.subscribeBtn:
                     subscribeSet();
                     break;
+                case R.id.cancelSubscriptionBtn:
+                    cancelSubscriptionSet();
+                    break;
             }
         };
 
@@ -85,6 +89,7 @@ public class FunctionActivity extends AppCompatActivity {
         returnBtn.setOnClickListener(listener);
         searchBtn.setOnClickListener(listener);
         subscribeBtn.setOnClickListener(listener);
+        cancelSubscriptionBtn.setOnClickListener(listener);
     }
 
     private void borrowSet(){
@@ -104,6 +109,13 @@ public class FunctionActivity extends AppCompatActivity {
         bundle.putString("FUNCTION_STRING", getResources().getString(R.string.subscribe_item));
         intent.putExtras(bundle);
         intent.setClass(this, SubscribeActivity.class);
+        startActivity(intent);
+    }
+
+    private void cancelSubscriptionSet(){
+        bundle.putString("FUNCTION_STRING", getResources().getString(R.string.subscribe_item));
+        intent.putExtras(bundle);
+        intent.setClass(this, CancelSubscriptionActivity.class);
         startActivity(intent);
     }
 
