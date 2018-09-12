@@ -71,13 +71,14 @@ public class WelcomeActivity extends AppCompatActivity {
     }
 
     private void setWelcomeTxt() {
-        /* Modified it for testing
-        Bundle bundle = getIntent().getExtras();
-        userName = bundle.getString("USER");
-        */
 
+      // Bundle bundle = getIntent().getExtras();
+      // userName = bundle.getString("USER");
+        Intent intent = getIntent();
+        String userName = intent.getStringExtra("USER");
+        Log.i("Owen","WelcomoeActivity"+userName);
         /* Modified it for testing */
-        userName = "Rex";
+       // userName = "Rex";
         String s;
 
 
