@@ -39,7 +39,7 @@ public class AutoService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-                date2 = "2018-08-28";
+                date2 = "2018-09-20";
                     if (DateUtils.isDate2Bigger(date2,dateFormat.format(date) )){
                         NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                         NotificationCompat.Builder builder = new NotificationCompat.Builder(AutoService.this)
@@ -50,20 +50,22 @@ public class AutoService extends Service {
                         .setAutoCancel(true);
                         Notification notification = builder.build();
                         manager.notify(1,notification);
-                    Log.e("Owen","onStartCommand end - Thread ID = " + Thread.currentThread().getId());
+                    //Log.e("Owen","onStartCommand end - Thread ID = " + Thread.currentThread().getId());
                     }
 
                 //dosomething
 
         AlarmManager manager1 = (AlarmManager) getSystemService(ALARM_SERVICE);
         int mHour = 8*60*60*1000; //8hours
-        long triggerAtTime = SystemClock.elapsedRealtime()+mHour;
+        //long triggerAtTime = SystemClock.elapsedRealtime()+mHour;
+        long triggerAtTime = System.currentTimeMillis()+mHour;
+
         Log.e("Owen" + mHour,"onStartCommand - 2 = "+ triggerAtTime);
         Intent intent2 = new Intent(this,AutoReceiver.class);
         PendingIntent pi = PendingIntent.getBroadcast(this,0,intent2,0);
         manager1.set(AlarmManager.RTC_WAKEUP,triggerAtTime,pi);
         flags = START_STICKY;
-        Log.e("Owen","onStartCommand - 3= ");
+        //Log.e("Owen","onStartCommand - 3= ");
         return super.onStartCommand(intent, flags, startId);
     }
 
