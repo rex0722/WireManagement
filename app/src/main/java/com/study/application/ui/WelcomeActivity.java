@@ -75,7 +75,7 @@ public class WelcomeActivity extends AppCompatActivity {
       // Bundle bundle = getIntent().getExtras();
       // userName = bundle.getString("USER");
         Intent intent = getIntent();
-        String userName = intent.getStringExtra("USER");
+        userName = intent.getStringExtra("USER");
         Log.i("Owen","WelcomoeActivity"+userName);
         /* Modified it for testing */
        // userName = "Rex";
