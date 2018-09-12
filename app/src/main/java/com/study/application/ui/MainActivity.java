@@ -57,9 +57,6 @@ public class MainActivity extends AppCompatActivity {
         /* Connect to LeanCloud database. */
         AVOSCloud.initialize(this,"oOxUTjO1eEyTxGS32vWa4uhT-gzGzoHsz","oEruGz6TQaE8iLQESN06tBBK");
 
-        /* Read ObjectId from database */
-        Reader.setObjectID();
-
         /* Disable Speech Recognition and Speech Synthesis functions temporarily
 
         speechDataReader.loginDataLoad();

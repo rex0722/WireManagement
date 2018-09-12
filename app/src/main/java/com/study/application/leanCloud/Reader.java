@@ -24,6 +24,7 @@ public class Reader {
     private BorrowCheckCallback borrowCheckCallback;
     private ReturnCheckCallback returnCheckCallback;
     private SubscribeCallback subscribeCallback;
+    private CancelSubscriptionCallback cancelSubscriptionCallback;
 
     public Reader(Context context, int identification){
         switch (identification){
@@ -35,6 +36,9 @@ public class Reader {
                 break;
             case ActivityID.SUBSCRIBE_ACTIVITY:
                 subscribeCallback = (SubscribeCallback) context;
+                break;
+            case ActivityID.CANCEL_SUBSCRIBE_ACTIVITY:
+                cancelSubscriptionCallback = (CancelSubscriptionCallback) context;
                 break;
         }
     }
@@ -200,8 +204,29 @@ public class Reader {
         });
     }
 
-    public void checkSubscribeDate(){
+    public void checkSubscribeDate(String item){
+        String cql = "SELECT estimatedTimeReturnNum FROM Record WHERE item = " + '"' + item + '"';
+        AVQuery.doCloudQueryInBackground(cql, new CloudQueryCallback<AVCloudQueryResult>() {
+            @Override
+            public void done(AVCloudQueryResult result, AVException e) {
+                subscribeCallback.checkItemEstimatedTimeReturn(result.getResults().get(0).getLong("estimatedTimeReturnNum"));
+            }
+        });
+    }
 
+    public void checkSubscriptionItemCanCancel(String subscriber){
+        String cql = "SELECT item FROM Record WHERE subscriber = " + '"' + subscriber + '"';
+        AVQuery.doCloudQueryInBackground(cql, new CloudQueryCallback<AVCloudQueryResult>() {
+            @Override
+            public void done(AVCloudQueryResult result, AVException e) {
+                ArrayList<String> list = new ArrayList<>();
+
+                for (int i = 0; i < result.getResults().size(); i++)
+                    list.add(result.getResults().get(i).getString("item"));
+
+                cancelSubscriptionCallback.checkSubscriptionItemCanCancel(list.toArray(new String[list.size()]));
+            }
+        });
     }
 
     private String keyWordJudge(String word) {

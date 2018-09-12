@@ -39,7 +39,7 @@
         android:layout_marginBottom="30dp"
         android:layout_marginEnd="16dp"
         android:background="@drawable/button_shape"
-        android:text="@string/search"
+        android:text="@string/btn_text_search"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/lvData"
         app:layout_constraintEnd_toEndOf="parent"

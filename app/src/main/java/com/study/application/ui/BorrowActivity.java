@@ -41,12 +41,11 @@ public class BorrowActivity extends AppCompatActivity implements BorrowCheckCall
 
     private final String TAG = "BorrowActivity";
 
-    private String status, conditionSearchValue, dialogSuccessMessage;
+    private String status;
     public static final int NO_SUBSCRIBER = 10001, NOT_SAME_AS_SUBSCRIBER = 10002, SAME_AS_SUBSCRIBER = 10003;
 
     private boolean isItemReturn = false;
 
-    private TextInputLayout itemInputLayout;
     private EditText borrowDateEdt;
     private EditText returnDateEdt;
     private EditText nameEdt;
@@ -85,7 +84,6 @@ public class BorrowActivity extends AppCompatActivity implements BorrowCheckCall
     }
 
     private void initView() {
-        itemInputLayout = findViewById(R.id.itemInputLayout);
         borrowDateEdt = findViewById(R.id.borrowdateEdt);
         returnDateEdt = findViewById(R.id.returndateEdt);
         nameEdt = findViewById(R.id.nameEdt);
