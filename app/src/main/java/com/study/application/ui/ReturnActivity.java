@@ -76,15 +76,12 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
         setListeners();
         setEditText();
         broadcastRegister();
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         StatusDefinition.CURRENT_STATUS = StatusDefinition.BORROW_RETURN_SEARCH;
-        Log.i("TAG", "MainActivity---onResume");
     }
 
     private void initView() {
@@ -155,44 +152,22 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        boolean canBorrow_or_Return = false;
-        String message = "";
-
-        if (requestCode == REQUEST_CODE) {
-            if (data != null) {
-                String s = data.getExtras().getString("ITEM");
-
-                for (int i = 0; i < conditionDataArrayList.size(); i++) {
-
-                    if (conditionDataArrayList.get(i).getIndex().contains(s)) {
-                        if (status.equals(getString(R.string.status_return))) {
-                            if (conditionDataArrayList.get(i).getUser().contains(nameEdt.getText().toString())) {
-                                canBorrow_or_Return = true;
-                                break;
-                            } else {
-                                message = getString(R.string.dialog_message_return_user_error);
-                                break;
-                            }
-                        } else {
-                            canBorrow_or_Return = true;
-                            break;
-                        }
-                    } else {
-                        canBorrow_or_Return = false;
-                        message = status;
-                    }
-
-                }
-
-
-                if (canBorrow_or_Return)
-                    itemEdt.setText(s);
-                else {
-                    itemEdt.setText("");
-                    Toast.makeText(ReturnActivity.this, s + message, Toast.LENGTH_LONG).show();
-                    SpeechSynthesis.textToSpeech.speak(s + message, TextToSpeech.QUEUE_FLUSH, null );
-                }
+        if (requestCode == Constant.REQ_QR_CODE && resultCode == RESULT_OK && data != null){
+            Bundle bundle = data.getExtras();
+            String scanResult = bundle.getString(Constant.INTENT_EXTRA_KEY_QR_SCAN);
+            boolean isScanResultCorrect = false;
+            for (int i = 0; i < Reader.objectIdDataArrayList.size(); i++){
+                if (scanResult.equals(Reader.objectIdDataArrayList.get(i).getItem())){
+                    isScanResultCorrect = true;
+                    break;
+                }else
+                    isScanResultCorrect = false;
             }
+
+            if (isScanResultCorrect)
+                itemEdt.setText(scanResult);
+            else
+                Toast.makeText(this, getString(R.string.dialog_message_scan_result_error), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -223,7 +198,7 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
             reader.checkReturnerSameAsBorrower(itemEdt.getText().toString(), nameEdt.getText().toString());
         else{
             Toast.makeText(ReturnActivity.this,
-                    itemEdt.getText().toString() + getString(R.string.status_return),
+                    itemEdt.getText().toString() + getString(R.string.dialog_message_return_error),
                     Toast.LENGTH_LONG).show();
             itemEdt.setText("");
         }

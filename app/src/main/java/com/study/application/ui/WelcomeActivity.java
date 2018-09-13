@@ -80,7 +80,7 @@ public class WelcomeActivity extends AppCompatActivity {
       // userName = bundle.getString("USER");
         Intent intent = getIntent();
         userName = intent.getStringExtra("USER");
-        Log.i("Owen","WelcomoeActivity"+userName);
+        Log.i("Owen","WelcomeActivity"+userName);
         /* Modified it for testing */
        // userName = "Rex";
         String s;
@@ -88,11 +88,11 @@ public class WelcomeActivity extends AppCompatActivity {
 
         if (!IconConstants.IC_PERSON_MAP.containsKey(userName) || userName.equals("NoOne")) {
             isKnownUser = false;
-            s = userName + "???";
+            s = userName + "　???";
 //            SpeechSynthesis.textToSpeech.speak("Who are you", TextToSpeech.QUEUE_FLUSH, null);
         } else {
             isKnownUser = true;
-            s = "Welcome " + userName;
+            s = getString(R.string.txt_welcome) + userName;
 //            SpeechSynthesis.textToSpeech.speak(s,TextToSpeech.QUEUE_FLUSH, null );
         }
         welcomeTxt.setText(s);

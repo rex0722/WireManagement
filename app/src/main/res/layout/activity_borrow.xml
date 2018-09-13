@@ -26,7 +26,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
-            android:focusable="true"
+            android:focusable="false"
             android:inputType="text"
             android:longClickable="false"
             android:textSize="30dp" />
@@ -90,13 +90,12 @@
         android:layout_marginEnd="40dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="35dp"
-        android:hint="@string/return_date"
+        android:hint="@string/txt_estimated_time_of_return"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dateInputLayout">
 
-        <!-- Modified it for testing => focusable change from false to true.  -->
         <EditText
             android:id="@+id/returndateEdt"
             android:layout_width="match_parent"
@@ -117,7 +116,7 @@
         android:layout_marginEnd="28dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/button_shape"
-        android:text="@string/submit"
+        android:text="@string/btn_text_submit"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnDate" />

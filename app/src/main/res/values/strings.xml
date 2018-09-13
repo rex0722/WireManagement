@@ -8,39 +8,46 @@
     <string name="btn_text_search">查詢</string>
     <string name="btn_text_subscription">預約</string>
     <string name="btn_text_cancel_subscription">取消預約</string>
-    <string name="date">歸還日期</string>
-    <string name="subdate">預約日期</string>
+    <string name="btn_text_submit">提交</string>
+
+    <string name="subscription_date">預約日期</string>
     <string name="borrow_date">借用日期</string>
-    <string name="return_date">預計歸還日期</string>
     <string name="user_name">姓名</string>
     <string name="borrow_item">借用項目</string>
     <string name="return_item">歸還項目</string>
     <string name="subscribe_item">預約項目</string>
-    <string name="submit">提交</string>
+
+    <string name="txt_qr_code_scan">Scan QR Code</string>
+    <string name="txt_welcome">Welcome　</string>
     <string name="txt_index">編號：</string>
     <string name="txt_classification">品項：</string>
     <string name="txt_user">使用者：</string>
     <string name="txt_date">借用日期：</string>
     <string name="txt_return_date">歸還日期：</string>
-    <string name="txt_estimated_time_return">預計歸還日期：</string>
+    <string name="txt_estimated_time_of_return">預計歸還日期：</string>
     <string name="txt_subscribe_date">預約使用日期：</string>
     <string name="txt_status">狀態：</string>
     <string name="txt_subscriber">預約者：</string>
+
     <string name="status_return">已歸還</string>
     <string name="status_borrow">已借用</string>
     <string name="status_subscribe">已預約</string>
+
     <string name="dialog_title_error">錯誤</string>
     <string name="dialog_title_inform">通知</string>
+    <string name="dialog_message_scan_result_error">沒有您所掃描的項目</string>
     <string name="dialog_message_turn_to_subscribe">已被借用，但尚未被預約，請問您是否要預約?</string>
-    <string name="dialog_message_borrow_success">已成功借用!</string>
+    <string name="dialog_message_return_error">未被借用，您無法歸還</string>
     <string name="dialog_message_borrow_fail">尚未歸還，且已有預約者</string>
-    <string name="dialog_message_return_success">已成功歸還!</string>
-    <string name="dialog_message_subscribe_success">已成功預約!</string>
+    <string name="dialog_message_borrow_success">已完成借用！</string>
+    <string name="dialog_message_return_success">已完成歸還！</string>
+    <string name="dialog_message_subscribe_success">已完成預約！</string>
+    <string name="dialog_message_cancel_success">已完成取消！</string>
     <string name="dialog_message_no_data">尚未選擇項目</string>
     <string name="dialog_button_check">確定</string>
     <string name="dialog_button_cancel">取消</string>
-    <string name="dialog_message_return_user_error">不是你借用的\n不可以幫別人歸還!!!!</string>
-    <string name="dialog_message_subscribe_user_error">當前時間內無法預約!!!!</string>
+    <string name="dialog_message_return_user_error">不是你借用的\n不可以幫別人歸還！！</string>
+    <string name="dialog_message_subscribe_user_error">當前時間內無法預約！！</string>
     <string name="dialog_message_not_subscriber">已有人預約，您不是預約者</string>
     <string name="dialog_message_nothing_can_subscribe">目前沒有線材可以預約</string>
     <string name="dialog_message_nothing_can_cancel_subscription">您沒有任何預約項目可以取消</string>

@@ -58,6 +58,17 @@ public class Writer{
         avObject.saveInBackground();
     }
 
+    public void writeCancelSubscriptionDataToDatabase(String item){
+        avObject = AVObject.createWithoutData(dataTable, getObjectId(item));
+
+        avObject.put("subscribeDate", "");
+        avObject.put("subscribeDateReturn", "");
+        avObject.put("subscriber", "");
+        avObject.put("subscribeDateNum", 0);
+        avObject.put("subscribeDateReturnNum", 0);
+        avObject.saveInBackground();
+    }
+
     private String getObjectId(String item){
         int index;
 

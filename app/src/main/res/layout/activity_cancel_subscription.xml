@@ -56,7 +56,7 @@
         android:layout_marginEnd="40dp"
         android:layout_marginTop="32dp"
         android:background="@drawable/button_shape"
-        android:text="@string/submit"
+        android:text="@string/btn_text_submit"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/itemInputLayout" />

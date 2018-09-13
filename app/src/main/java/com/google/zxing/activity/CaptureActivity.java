@@ -27,6 +27,8 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceHolder.Callback;
 import android.view.SurfaceView;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -89,10 +91,14 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_scanner);
         //ViewUtil.addTopView(getApplicationContext(), this, R.string.scan_card);
         CameraManager.init(getApplication());
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_content);
+
+    /* Disable below code by Rex
         back = (ImageButton) findViewById(R.id.btn_back);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,12 +106,14 @@ public class CaptureActivity extends AppCompatActivity implements Callback {
                 finish();
             }
         });
+        btnAlbum = (Button) findViewById(R.id.btn_album);
+        btnAlbum.setOnClickListener(albumOnClick);
+    END */
 
         btnFlash = (ImageButton) findViewById(R.id.btn_flash);
         btnFlash.setOnClickListener(flashListener);
 
-        btnAlbum = (Button) findViewById(R.id.btn_album);
-        btnAlbum.setOnClickListener(albumOnClick);
+
 
 //		cancelScanButton = (Button) this.findViewById(R.id.btn_cancel_scan);
         hasSurface = false;

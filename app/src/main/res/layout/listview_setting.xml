@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
 
             android:layout_gravity="right"
-            android:text="@string/txt_estimated_time_return"
+            android:text="@string/txt_estimated_time_of_return"
             android:textSize="20sp"/>
 
         <TextView

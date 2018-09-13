@@ -4,16 +4,17 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.study.application.R;
 import com.study.application.leanCloud.ActivityID;
 import com.study.application.leanCloud.CancelSubscriptionCallback;
 import com.study.application.leanCloud.Reader;
+import com.study.application.leanCloud.Writer;
 
 public class CancelSubscriptionActivity extends AppCompatActivity implements CancelSubscriptionCallback{
 
@@ -21,6 +22,7 @@ public class CancelSubscriptionActivity extends AppCompatActivity implements Can
     private EditText edtName;
     private Button btnSubmit;
     private Reader reader;
+    private Writer writer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class CancelSubscriptionActivity extends AppCompatActivity implements Can
 
         initView();
         initSetup();
+        setListener();
     }
 
     private void initView(){
@@ -39,16 +42,16 @@ public class CancelSubscriptionActivity extends AppCompatActivity implements Can
 
     private void initSetup(){
         reader =  new Reader(this, ActivityID.CANCEL_SUBSCRIBE_ACTIVITY);
+        writer = new Writer();
         edtName.setText(WelcomeActivity.userName);
         reader.checkSubscriptionItemCanCancel(WelcomeActivity.userName);
     }
 
     private void setListener(){
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
+        btnSubmit.setOnClickListener(v -> {
+            writer.writeCancelSubscriptionDataToDatabase(spnSubscribeItem.getSelectedItem().toString());
+            Toast.makeText(this, getString(R.string.dialog_message_cancel_success),Toast.LENGTH_LONG).show();
+            reader.checkSubscriptionItemCanCancel(WelcomeActivity.userName);
         });
     }
 

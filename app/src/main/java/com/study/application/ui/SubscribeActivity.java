@@ -56,6 +56,7 @@ import java.util.Calendar;
     private Button submitBtn;
     private Spinner spnSubscribeItem;
     private String data1,data2;
+    private boolean isFromBorrowActivity;
 
     private ArrayList<DisplayData> conditionDataArrayList;
     private Calendar borCalendar, retCalendar;
@@ -97,11 +98,13 @@ import java.util.Calendar;
             Intent intent = getIntent();
             String item = intent.getExtras().getString("ITEM");
 
+            isFromBorrowActivity = true;
             spnSubscribeItem.setVisibility(View.GONE);
             itemEdt.setVisibility(View.VISIBLE);
             itemEdt.setText(item);
             fromActivity = StatusDefinition.BORROW_RETURN_SEARCH;
         }else {
+            isFromBorrowActivity = false;
             spnSubscribeItem.setVisibility(View.VISIBLE);
             itemEdt.setVisibility(View.GONE);
             fromActivity = StatusDefinition.FUNCTION_SELECT;
@@ -225,50 +228,22 @@ import java.util.Calendar;
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-
-
-        boolean canSubscribe = false;
-        String message = "";
-
-        if (requestCode == REQUEST_CODE) {
-            if (data != null) {
-                String s = data.getExtras().getString("SUBSCRIBEITEM");
-
-                for (int i = 0; i < conditionDataArrayList.size(); i++) {
-
-                    if (conditionDataArrayList.get(i).getIndex().contains(s)) {
-                        if (status.equals(getString(R.string.status_return))) {
-
-                            canSubscribe = true;
-                            break;
-                            }
-                         else if (status.equals(getString(R.string.status_borrow))){
-                            //data1:the data of borrow,  data2: the data of subscribe
-                            if (DateUtils.isDate2Bigger(data1,data2)){
-                                canSubscribe = true;
-                            }else{
-                                canSubscribe = false;
-
-                                message = getString(R.string.dialog_message_subscribe_user_error);
-                                break;
-                            }
-
-                        }
-                    } else {
-                        canSubscribe = false;
-                        message = status;
-                    }
-
-                }
-
-                if (canSubscribe)
-                    itemEdt.setText(s);
-                else {
-                    itemEdt.setText("");
-                    Toast.makeText(SubscribeActivity.this, s + message, Toast.LENGTH_LONG).show();
-                    SpeechSynthesis.textToSpeech.speak(s + message, TextToSpeech.QUEUE_FLUSH, null );
-                }
+        if (requestCode == Constant.REQ_QR_CODE && resultCode == RESULT_OK && data != null){
+            Bundle bundle = data.getExtras();
+            String scanResult = bundle.getString(Constant.INTENT_EXTRA_KEY_QR_SCAN);
+            boolean isScanResultCorrect = false;
+            for (int i = 0; i < Reader.objectIdDataArrayList.size(); i++){
+                if (scanResult.equals(Reader.objectIdDataArrayList.get(i).getItem())){
+                    isScanResultCorrect = true;
+                    break;
+                }else
+                    isScanResultCorrect = false;
             }
+
+            if (isScanResultCorrect)
+                itemEdt.setText(scanResult);
+            else
+                Toast.makeText(this, getString(R.string.dialog_message_scan_result_error), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -332,6 +307,9 @@ import java.util.Calendar;
 //            subDateEdt.setText(dateFormat.format(date.getTime()));//waiting for API
             itemEdt.setText("");
             reader.checkSubscribeItem();
+
+            if (isFromBorrowActivity)
+                finish();
         }else {
             String message = itemName + getString(R.string.dialog_message_subscribe_date_error1) +
                             dateFormat.format(estimatedTimeReturnNum) +
