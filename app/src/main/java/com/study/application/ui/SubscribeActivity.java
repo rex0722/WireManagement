@@ -1,13 +1,17 @@
 package com.study.application.ui;
 
+import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -21,6 +25,7 @@ import android.widget.Toast;
 import android.app.DatePickerDialog;
 import android.widget.DatePicker;
 
+import com.google.zxing.activity.CaptureActivity;
 import com.study.application.R;
 import com.study.application.leanCloud.ActivityID;
 import com.study.application.leanCloud.DisplayData;
@@ -31,6 +36,7 @@ import com.study.application.scanner.ScanQrCodeActivity;
 import com.study.application.speech.Classification;
 import com.study.application.speech.SpeechSynthesis;
 import com.study.application.speech.StatusDefinition;
+import com.study.application.util.Constant;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -111,6 +117,7 @@ import java.util.Calendar;
         itemEdt.setOnClickListener(view -> {
             /* Disable it temporarily */
 //            scanQrCodeActivityStartUp();
+            startQrCode();
         });
 
         submitBtn.setOnClickListener(v -> {
@@ -125,6 +132,17 @@ import java.util.Calendar;
             DatePicker(subDateEdt, 2);
         });
     }
+        // 开始扫码 Owen add
+        private void startQrCode() {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                // 申请权限
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, Constant.REQ_PERM_CAMERA);
+                return;
+            }
+            // 二维码扫码
+            Intent intent = new Intent(this, CaptureActivity.class);
+            startActivityForResult(intent, Constant.REQ_QR_CODE);
+        }
 
         private void scanQrCodeActivityStartUp(){
             Bundle bundle = new Bundle();
