@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,11 +17,11 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-import com.avos.avoscloud.AVOSCloud;
 import com.study.application.R;
 import com.study.application.leanCloud.DisplayData;
 import com.study.application.leanCloud.ListViewDataAdapter;
 import com.study.application.leanCloud.Reader;
+import com.study.application.leanCloud.RecyclerViewAdapter;
 import com.study.application.speech.Classification;
 import com.study.application.speech.StatusDefinition;
 
@@ -30,10 +32,12 @@ public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
     public static Context searchContext;
 
-    private ListView lvData;
     private Spinner spnType;
     private Spinner spnItem;
     private Button btnSearch;
+    private RecyclerView rycData;
+    private RecyclerView.Adapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
     private boolean isDataReady = false;
 
     private final DataBroadcast dataBroadcast = new DataBroadcast();
@@ -67,7 +71,9 @@ public class SearchActivity extends AppCompatActivity {
         spnType = findViewById(R.id.spnType);
         spnItem = findViewById(R.id.spnItem);
         btnSearch = findViewById(R.id.btnSearch);
-        lvData = findViewById(R.id.lvData);
+        rycData = findViewById(R.id.rycData);
+        layoutManager = new LinearLayoutManager(this);
+        rycData.setLayoutManager(layoutManager);
     }
 
     private void broadcastRegister() {
@@ -119,7 +125,7 @@ public class SearchActivity extends AppCompatActivity {
     private class DataBroadcast extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ListViewDataAdapter adapter;
+
             ArrayList<DisplayData> dataArrayList;
             ArrayList<DisplayData> conditionDataArrayList;
 
@@ -127,8 +133,8 @@ public class SearchActivity extends AppCompatActivity {
                 switch (intent.getAction()) {
                     case "DelverData":
                         dataArrayList = (ArrayList<DisplayData>) intent.getSerializableExtra("data");
-                        adapter = new ListViewDataAdapter(searchContext, dataArrayList);
-                        lvData.setAdapter(adapter);
+                        adapter = new RecyclerViewAdapter(dataArrayList);
+                        rycData.setAdapter(adapter);
                         break;
                     case "SpinnerItemElement":
                         setSpinnerItemElements(intent.getStringArrayExtra("SpinnerItemElementArray"));
@@ -136,8 +142,8 @@ public class SearchActivity extends AppCompatActivity {
                         break;
                     case "DelverConditionData":
                         conditionDataArrayList = (ArrayList<DisplayData>) intent.getSerializableExtra("conditionData");
-                        adapter = new ListViewDataAdapter(searchContext, conditionDataArrayList);
-                        lvData.setAdapter(adapter);
+                        adapter = new RecyclerViewAdapter(conditionDataArrayList);
+                        rycData.setAdapter(adapter);
                         break;
                     case StatusDefinition.BORROW_RETURN_SEARCH:
                         voiceToSearchActivity(intent.getStringExtra(StatusDefinition.BORROW_RETURN_SEARCH));

@@ -10,10 +10,8 @@ import android.widget.TextView;
 
 import com.study.application.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.TreeMap;
+
 
 public class ListViewDataAdapter extends BaseAdapter{
 
