@@ -35,7 +35,7 @@
 
     <string name="dialog_title_error">錯誤</string>
     <string name="dialog_title_inform">通知</string>
-    <string name="dialog_message_scan_result_error">沒有您所掃描的項目</string>
+    <string name="dialog_message_scan_result_error">項目名稱錯誤</string>
     <string name="dialog_message_turn_to_subscribe">已被借用，但尚未被預約，請問您是否要預約?</string>
     <string name="dialog_message_return_error">未被借用，您無法歸還</string>
     <string name="dialog_message_borrow_fail">尚未歸還，且已有預約者</string>

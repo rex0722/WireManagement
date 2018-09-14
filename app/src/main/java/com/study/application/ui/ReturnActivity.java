@@ -98,14 +98,13 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
     }
 
     private void setListeners() {
-        itemEdt.setOnClickListener(view -> {
-            /* Disable it temporarily */
-//            scanQrCodeActivityStartUp();
+        itemEdt.setOnLongClickListener(view -> {
             startQrCode();
+            return false;
         });
 
         submitBtn.setOnClickListener(v -> {
-                submitFunction();
+            submitFunction();
         });
     }
     // 开始扫码 Owen add
@@ -119,23 +118,18 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
         Intent intent = new Intent(this, CaptureActivity.class);
         startActivityForResult(intent, Constant.REQ_QR_CODE);
     }
-    private void scanQrCodeActivityStartUp(){
-        Bundle bundle = new Bundle();
-        Intent intent = new Intent();
-
-        bundle.putString("TARGET", "ITEM");
-        intent.putExtras(bundle);
-        intent.setClass(this, ScanQrCodeActivity.class);
-
-        startActivityForResult(intent, REQUEST_CODE);
-    }
 
     private void submitFunction(){
         if (itemEdt.getText().toString().equals("")) {
             Toast.makeText(ReturnActivity.this, getString(R.string.dialog_message_no_data), Toast.LENGTH_LONG).show();
             SpeechSynthesis.textToSpeech.speak(getString(R.string.dialog_message_no_data),TextToSpeech.QUEUE_FLUSH, null );
         } else{
-            reader.itemStatusCheck(itemEdt.getText().toString(), ActivityID.RETURN_ACTIVITY);
+            if (isInputItemCorrect(itemEdt.getText().toString()))
+                reader.itemStatusCheck(itemEdt.getText().toString(), ActivityID.RETURN_ACTIVITY);
+            else{
+                Toast.makeText(this, getString(R.string.dialog_message_scan_result_error), Toast.LENGTH_LONG).show();
+                itemEdt.setText("");
+            }
         }
     }
 
@@ -148,6 +142,20 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
         nameEdt.setText(WelcomeActivity.userName);
     }
 
+    private boolean isInputItemCorrect(String item){
+
+        boolean isInputItemCorrect = false;
+        for (int i = 0; i < Reader.objectIdDataArrayList.size(); i++){
+            if (item.equals(Reader.objectIdDataArrayList.get(i).getItem())){
+                isInputItemCorrect = true;
+                break;
+            }else
+                isInputItemCorrect = false;
+        }
+
+        return isInputItemCorrect;
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -155,16 +163,8 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
         if (requestCode == Constant.REQ_QR_CODE && resultCode == RESULT_OK && data != null){
             Bundle bundle = data.getExtras();
             String scanResult = bundle.getString(Constant.INTENT_EXTRA_KEY_QR_SCAN);
-            boolean isScanResultCorrect = false;
-            for (int i = 0; i < Reader.objectIdDataArrayList.size(); i++){
-                if (scanResult.equals(Reader.objectIdDataArrayList.get(i).getItem())){
-                    isScanResultCorrect = true;
-                    break;
-                }else
-                    isScanResultCorrect = false;
-            }
 
-            if (isScanResultCorrect)
+            if (isInputItemCorrect(scanResult))
                 itemEdt.setText(scanResult);
             else
                 Toast.makeText(this, getString(R.string.dialog_message_scan_result_error), Toast.LENGTH_LONG).show();
@@ -175,7 +175,7 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
 
         switch (inputClassification){
             case Classification.SCAN:
-                scanQrCodeActivityStartUp();
+                startQrCode();
                 break;
             case Classification.SUBMIT:
                 submitFunction();

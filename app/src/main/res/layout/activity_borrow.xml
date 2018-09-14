@@ -26,9 +26,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:ems="10"
-            android:focusable="false"
+            android:focusable="true"
             android:inputType="text"
-            android:longClickable="false"
+            android:longClickable="true"
             android:textSize="30dp" />
     </android.support.design.widget.TextInputLayout>
     
