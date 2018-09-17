@@ -51,9 +51,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.i("Owen","MainActivity func");
-        Intent intent = new Intent(this,AutoService.class);
-        intent.setAction("android.intent.action.RESPOND_VIA_MESSAGE");
-        MainActivity.this.startService(intent);
+
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
