@@ -7,6 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TextInputLayout;
@@ -58,15 +60,19 @@ public class BorrowActivity extends AppCompatActivity implements BorrowCheckCall
     private EditText itemEdt;
     private Button submitBtn;
 
-    private ArrayList<DisplayData> conditionDataArrayList;
     private Reader reader;
     private final StatusBroadcast statusBroadcast = new StatusBroadcast();
     private final Writer writer = new Writer();
     public static final int REQUEST_CODE = 50;
 
+
     private final Date date = new Date();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.TAIWAN);
     private Calendar calendar;
+
+    ArrayList<DisplayData> conditionDataArrayList;
+    ConnectivityManager connectivityManager;
+    NetworkInfo networkInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,17 +134,29 @@ public class BorrowActivity extends AppCompatActivity implements BorrowCheckCall
     }
 
     private void submitFunction(){
-        if (itemEdt.getText().toString().equals("")) {
-            Toast.makeText(BorrowActivity.this, getString(R.string.dialog_message_no_data), Toast.LENGTH_LONG).show();
-            SpeechSynthesis.textToSpeech.speak(getString(R.string.dialog_message_no_data),TextToSpeech.QUEUE_FLUSH, null );
-        } else {
-            if (isInputItemCorrect(itemEdt.getText().toString()))
-                reader.itemStatusCheck(itemEdt.getText().toString(), ActivityID.BORROW_ACTIVITY);
-            else{
-                Toast.makeText(this, getString(R.string.dialog_message_scan_result_error), Toast.LENGTH_LONG).show();
-                itemEdt.setText("");
+        if (isNetworkConnected()){
+            if (itemEdt.getText().toString().equals("")) {
+                Toast.makeText(BorrowActivity.this, getString(R.string.dialog_message_no_data), Toast.LENGTH_LONG).show();
+                SpeechSynthesis.textToSpeech.speak(getString(R.string.dialog_message_no_data),TextToSpeech.QUEUE_FLUSH, null );
+            } else {
+                if (isInputItemCorrect(itemEdt.getText().toString()))
+                    reader.itemStatusCheck(itemEdt.getText().toString(), ActivityID.BORROW_ACTIVITY);
+                else{
+                    Toast.makeText(this, getString(R.string.dialog_message_scan_result_error), Toast.LENGTH_LONG).show();
+                    itemEdt.setText("");
+                }
             }
-        }
+        }else
+            new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_error)).
+                    setMessage(getString(R.string.dialog_message_network_error)).
+                    setPositiveButton(getString(R.string.dialog_button_check), (DialogInterface dialog, int which)-> {
+                    }).setIcon(R.drawable.error).show();
+    }
+
+    private boolean isNetworkConnected(){
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected() && networkInfo.isAvailable();
     }
 
     private void setEditText() {
@@ -273,7 +291,7 @@ public class BorrowActivity extends AppCompatActivity implements BorrowCheckCall
                         intent.putExtra("ITEM", itemName);
                         startActivity(intent);
                         finish();
-                    }).show();
+                    }).setIcon(R.drawable.inform).show();
         }else {
             Toast.makeText(BorrowActivity.this,
                     itemName + getString(R.string.dialog_message_borrow_fail),

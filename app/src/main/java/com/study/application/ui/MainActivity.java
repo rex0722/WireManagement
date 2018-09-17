@@ -3,6 +3,7 @@ package com.study.application.ui;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
@@ -13,6 +14,7 @@ import android.speech.SpeechRecognizer;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Window;
@@ -38,11 +40,11 @@ public class MainActivity extends AppCompatActivity {
     public static Context mContext;
     private MainBroadcast mainBroadcast = new MainBroadcast();
     private SpeechDataReader speechDataReader = new SpeechDataReader();
-    private  ConnectivityManager connectivityManager;
-    private  NetworkInfo networkInfo;
     public static SpeechRecognizer speech = null;
     public static Intent recognizerIntent = new Intent();
     private Button loginBtn;
+    ConnectivityManager connectivityManager;
+    NetworkInfo networkInfo;
 
 
     @Override
@@ -124,19 +126,21 @@ public class MainActivity extends AppCompatActivity {
 
     private void initSetup(){
 
-
         loginBtn.setOnClickListener(v -> {
-
             if (isNetworkConnected())
                 startQrCode();
             else
-                Toast.makeText(this, getString(R.string.dialog_message_network_error), Toast.LENGTH_LONG).show();
+                new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_error)).
+                        setMessage(getString(R.string.dialog_message_network_error)).
+                        setPositiveButton(getString(R.string.dialog_button_check), (DialogInterface dialog, int which)-> {
+                        }).setIcon(R.drawable.error).show();
         });
     }
 
     private boolean isNetworkConnected(){
         connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = connectivityManager.getActiveNetworkInfo();
+        Log.i("TAG", networkInfo.getState().toString());
         return networkInfo != null && networkInfo.isConnected() && networkInfo.isAvailable();
     }
 

@@ -2,9 +2,13 @@ package com.study.application.ui;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -43,6 +47,9 @@ public class SearchActivity extends AppCompatActivity {
     private final DataBroadcast dataBroadcast = new DataBroadcast();
     private final Reader reader = new Reader();
     private ArrayAdapter<CharSequence> spnTypeAdapter;
+
+    ConnectivityManager connectivityManager;
+    NetworkInfo networkInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,9 +92,15 @@ public class SearchActivity extends AppCompatActivity {
 
     private void setListeners() {
         btnSearch.setOnClickListener(v -> {
-            if (isDataReady) {
-                reader.conditionSearch(spnType.getSelectedItem().toString(), spnItem.getSelectedItem().toString());
-            }
+            if (isNetworkConnected()){
+                if (isDataReady) {
+                    reader.conditionSearch(spnType.getSelectedItem().toString(), spnItem.getSelectedItem().toString());
+                }
+            }else
+                new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_error)).
+                        setMessage(getString(R.string.dialog_message_network_error)).
+                        setPositiveButton(getString(R.string.dialog_button_check), (DialogInterface dialog, int which)-> {
+                        }).setIcon(R.drawable.error).show();
         });
 
         spnType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -101,6 +114,12 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean isNetworkConnected(){
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected() && networkInfo.isAvailable();
     }
 
     private void setSpinnerTypeElements() {

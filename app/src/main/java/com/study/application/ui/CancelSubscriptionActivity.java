@@ -63,7 +63,7 @@ public class CancelSubscriptionActivity extends AppCompatActivity implements Can
                     setMessage(getString(R.string.dialog_message_nothing_can_cancel_subscription)).
                     setPositiveButton(getString(R.string.dialog_button_check),(DialogInterface dialog, int which) -> {
                         finish();
-                    }).show();
+                    }).setIcon(R.drawable.inform).show();
         }else {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_setting, list);
             spnSubscribeItem.setAdapter(adapter);

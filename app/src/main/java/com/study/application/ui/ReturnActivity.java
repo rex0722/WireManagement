@@ -3,14 +3,18 @@ package com.study.application.ui;
 import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Window;
@@ -57,10 +61,11 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
     private final Writer writer = new Writer();
     public static final int REQUEST_CODE = 50;
 
-
     private final Date date = new Date();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.TAIWAN);
 
+    ConnectivityManager connectivityManager;
+    NetworkInfo networkInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,17 +125,30 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
     }
 
     private void submitFunction(){
-        if (itemEdt.getText().toString().equals("")) {
-            Toast.makeText(ReturnActivity.this, getString(R.string.dialog_message_no_data), Toast.LENGTH_LONG).show();
-            SpeechSynthesis.textToSpeech.speak(getString(R.string.dialog_message_no_data),TextToSpeech.QUEUE_FLUSH, null );
-        } else{
-            if (isInputItemCorrect(itemEdt.getText().toString()))
-                reader.itemStatusCheck(itemEdt.getText().toString(), ActivityID.RETURN_ACTIVITY);
-            else{
-                Toast.makeText(this, getString(R.string.dialog_message_scan_result_error), Toast.LENGTH_LONG).show();
-                itemEdt.setText("");
+        if (isNetworkConnected()){
+            if (itemEdt.getText().toString().equals("")) {
+                Toast.makeText(ReturnActivity.this, getString(R.string.dialog_message_no_data), Toast.LENGTH_LONG).show();
+                SpeechSynthesis.textToSpeech.speak(getString(R.string.dialog_message_no_data),TextToSpeech.QUEUE_FLUSH, null );
+            } else{
+                if (isInputItemCorrect(itemEdt.getText().toString()))
+                    reader.itemStatusCheck(itemEdt.getText().toString(), ActivityID.RETURN_ACTIVITY);
+                else{
+                    Toast.makeText(this, getString(R.string.dialog_message_scan_result_error), Toast.LENGTH_LONG).show();
+                    itemEdt.setText("");
+                }
             }
-        }
+        }else
+            new AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_error)).
+                    setMessage(getString(R.string.dialog_message_network_error)).
+                    setPositiveButton(getString(R.string.dialog_button_check), (DialogInterface dialog, int which)-> {
+                    }).setIcon(R.drawable.error).show();
+
+    }
+
+    private boolean isNetworkConnected(){
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected() && networkInfo.isAvailable();
     }
 
 

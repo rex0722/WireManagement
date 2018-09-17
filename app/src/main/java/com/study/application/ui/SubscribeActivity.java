@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.ActivityCompat;
@@ -68,6 +70,8 @@ import java.util.Calendar;
     private final Date date = new Date();
     private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.TAIWAN);
 
+    ConnectivityManager connectivityManager;
+    NetworkInfo networkInfo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,21 +163,34 @@ import java.util.Calendar;
         }
 
     private void submitFunction(){
-        if (fromActivity.equals(StatusDefinition.BORROW_RETURN_SEARCH) && itemEdt.getText().toString().equals("")) {
-            Toast.makeText(SubscribeActivity.this, getString(R.string.dialog_message_no_data), Toast.LENGTH_LONG).show();
-            SpeechSynthesis.textToSpeech.speak(getString(R.string.dialog_message_no_data),TextToSpeech.QUEUE_FLUSH, null );
-        } else {
+        if(isNetworkConnected()){
+            if (fromActivity.equals(StatusDefinition.BORROW_RETURN_SEARCH) && itemEdt.getText().toString().equals("")) {
+                Toast.makeText(SubscribeActivity.this, getString(R.string.dialog_message_no_data), Toast.LENGTH_LONG).show();
+                SpeechSynthesis.textToSpeech.speak(getString(R.string.dialog_message_no_data),TextToSpeech.QUEUE_FLUSH, null );
+            } else {
 
-            if (checkReturnDateLaterThanBorrowDate(borCalendar.getTime().getTime(), retCalendar.getTime().getTime())){
-                if (fromActivity.equals(StatusDefinition.FUNCTION_SELECT))
-                    itemName = spnSubscribeItem.getSelectedItem().toString();
-                else
-                    itemName = itemEdt.getText().toString();
+                if (checkReturnDateLaterThanBorrowDate(borCalendar.getTime().getTime(), retCalendar.getTime().getTime())){
+                    if (fromActivity.equals(StatusDefinition.FUNCTION_SELECT))
+                        itemName = spnSubscribeItem.getSelectedItem().toString();
+                    else
+                        itemName = itemEdt.getText().toString();
 
-                reader.checkSubscribeDate(itemName);
-            }else
-                Toast.makeText(SubscribeActivity.this, getString(R.string.dialog_message_return_date_earlier_than_borrow_date), Toast.LENGTH_LONG).show();
-        }
+                    reader.checkSubscribeDate(itemName);
+                }else
+                    Toast.makeText(SubscribeActivity.this, getString(R.string.dialog_message_return_date_earlier_than_borrow_date), Toast.LENGTH_LONG).show();
+            }
+        }else
+            new android.support.v7.app.AlertDialog.Builder(this).setTitle(getString(R.string.dialog_title_error)).
+                    setMessage(getString(R.string.dialog_message_network_error)).
+                    setPositiveButton(getString(R.string.dialog_button_check), (DialogInterface dialog, int which)-> {
+                    }).setIcon(R.drawable.error).show();
+
+    }
+
+    private boolean isNetworkConnected(){
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected() && networkInfo.isAvailable();
     }
 
     private void setEditText() {
@@ -278,7 +295,7 @@ import java.util.Calendar;
                         setMessage(R.string.dialog_message_nothing_can_subscribe).
                         setPositiveButton(R.string.dialog_button_check, (DialogInterface dialog, int which) -> {
                             finish();
-                        }).show();
+                        }).setIcon(R.drawable.inform).show();
         }else {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner_setting, itemList);
             spnSubscribeItem.setAdapter(adapter);
