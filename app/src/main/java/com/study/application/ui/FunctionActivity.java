@@ -47,6 +47,7 @@ public class FunctionActivity extends AppCompatActivity implements FunctionCallb
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
@@ -74,15 +75,15 @@ public class FunctionActivity extends AppCompatActivity implements FunctionCallb
 
         Button.OnClickListener listener = view -> {
 
-            switch (view.getId()) {
-                case R.id.borrowedBtn:
-                    borrowSet();
-                    break;
-                case R.id.returnedBtn:
-                    returnSet();
-                    break;
-                case R.id.searchedBtn:
-                    searchSet();
+                    switch (view.getId()) {
+                        case R.id.borrowedBtn:
+                            borrowSet();
+                            break;
+                        case R.id.returnedBtn:
+                            returnSet();
+                            break;
+                        case R.id.searchedBtn:
+                            searchSet();
                     break;
                 case R.id.subscribeBtn:
                     subscribeSet();
@@ -157,12 +158,17 @@ public class FunctionActivity extends AppCompatActivity implements FunctionCallb
     }
 
 
+
     @Override
     public void checkEstimatedTimeReturn(String[] dateList, String[] itemList) {
         for (int i = 0; i < dateList.length; i++)
             Log.i("TAG", dateList[i] + "  " + itemList[i]);
+        Intent intent = new Intent(this,AutoService.class);
+        intent.setAction("android.intent.action.RESPOND_VIA_MESSAGE");
+        intent.putExtra("date",dateList);
+        intent.putExtra("item",itemList);
+        FunctionActivity.this.startService(intent);
     }
-
 
     private class FunctionBroadcast extends BroadcastReceiver{
 
