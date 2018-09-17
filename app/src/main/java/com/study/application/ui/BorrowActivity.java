@@ -65,7 +65,7 @@ public class BorrowActivity extends AppCompatActivity implements BorrowCheckCall
     public static final int REQUEST_CODE = 50;
 
     private final Date date = new Date();
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.TAIWAN);
     private Calendar calendar;
 
     @Override

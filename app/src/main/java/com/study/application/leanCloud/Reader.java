@@ -25,6 +25,7 @@ public class Reader {
     private ReturnCheckCallback returnCheckCallback;
     private SubscribeCallback subscribeCallback;
     private CancelSubscriptionCallback cancelSubscriptionCallback;
+    private FunctionCallback functionCallback;
 
     public Reader(Context context, int identification){
         switch (identification){
@@ -39,6 +40,9 @@ public class Reader {
                 break;
             case ActivityID.CANCEL_SUBSCRIBE_ACTIVITY:
                 cancelSubscriptionCallback = (CancelSubscriptionCallback) context;
+                break;
+            case ActivityID.FUNCTION_ACTIVITY:
+                functionCallback = (FunctionCallback)context;
                 break;
         }
     }
@@ -225,6 +229,30 @@ public class Reader {
                     list.add(result.getResults().get(i).getString("item"));
 
                 cancelSubscriptionCallback.checkSubscriptionItemCanCancel(list.toArray(new String[list.size()]));
+            }
+        });
+    }
+
+
+    public void checkEstimatedTimeReturn(String user, String status){
+        String cql = "SELECT estimatedTimeReturn, item FROM Record WHERE user = " + '"' + user + '"' + " AND status = " + '"' + status +'"';
+        AVQuery.doCloudQueryInBackground(cql, new CloudQueryCallback<AVCloudQueryResult>() {
+            @Override
+            public void done(AVCloudQueryResult result, AVException e) {
+                ArrayList<String> dateList = new ArrayList<>();
+                ArrayList<String> itemList = new ArrayList<>();
+
+                String item, date;
+                for (int i = 0; i < result.getResults().size(); i++){
+                    item = result.getResults().get(i).getString("item");
+                    date = result.getResults().get(i).getString("estimatedTimeReturn");
+                    if (!date.equals("")){
+                        dateList.add(date);
+                        itemList.add(item);
+                    }
+
+                }
+                functionCallback.checkEstimatedTimeReturn(dateList.toArray(new String[dateList.size()]), itemList.toArray(new String[itemList.size()]));
             }
         });
     }

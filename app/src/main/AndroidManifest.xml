@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.study.application">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,9 +13,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/wire"
+        android:icon="@drawable/warehouse"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/wire"
+        android:roundIcon="@drawable/warehouse"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.MainActivity">

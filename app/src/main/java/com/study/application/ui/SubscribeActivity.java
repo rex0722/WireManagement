@@ -66,7 +66,7 @@ import java.util.Calendar;
     public static final int REQUEST_CODE = 60;
 
     private final Date date = new Date();
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.TAIWAN);
 
 
     @Override

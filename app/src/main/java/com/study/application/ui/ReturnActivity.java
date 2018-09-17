@@ -59,7 +59,7 @@ public class ReturnActivity extends AppCompatActivity implements ReturnCheckCall
 
 
     private final Date date = new Date();
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.TAIWAN);
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.TAIWAN);
 
 
     @Override

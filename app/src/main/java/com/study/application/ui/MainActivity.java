@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
 import android.support.annotation.NonNull;
@@ -21,9 +23,7 @@ import android.widget.Toast;
 import com.avos.avoscloud.AVOSCloud;
 import com.google.zxing.activity.CaptureActivity;
 import com.study.application.R;
-import com.study.application.leanCloud.Reader;
 import com.study.application.leanCloud.SpeechDataReader;
-import com.study.application.scanner.ScanQrCodeActivity;
 import com.study.application.speech.Classification;
 import com.study.application.speech.SpeechRecognition;
 import com.study.application.speech.SpeechSynthesis;
@@ -38,9 +38,11 @@ public class MainActivity extends AppCompatActivity {
     public static Context mContext;
     private MainBroadcast mainBroadcast = new MainBroadcast();
     private SpeechDataReader speechDataReader = new SpeechDataReader();
+    private  ConnectivityManager connectivityManager;
+    private  NetworkInfo networkInfo;
     public static SpeechRecognizer speech = null;
     public static Intent recognizerIntent = new Intent();
-
+    private Button loginBtn;
 
 
     @Override
@@ -56,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initView();
+        initSetup();
         broadcastRegister();
         SpeechSynthesis.createTTS();
 
@@ -116,12 +119,25 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         mContext = this;
-        Button loginBtn = findViewById(R.id.loginBtn);
+        loginBtn = findViewById(R.id.loginBtn);
+    }
+
+    private void initSetup(){
+
 
         loginBtn.setOnClickListener(v -> {
-            //scanQrCodeActivityStartUp();
-            startQrCode();
+
+            if (isNetworkConnected())
+                startQrCode();
+            else
+                Toast.makeText(this, getString(R.string.dialog_message_network_error), Toast.LENGTH_LONG).show();
         });
+    }
+
+    private boolean isNetworkConnected(){
+        connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = connectivityManager.getActiveNetworkInfo();
+        return networkInfo != null && networkInfo.isConnected() && networkInfo.isAvailable();
     }
 
     // 开始扫码

@@ -13,15 +13,21 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.avos.avoscloud.AVException;
+
 import com.study.application.R;
+import com.study.application.leanCloud.ActivityID;
+import com.study.application.leanCloud.Reader;
 import com.study.application.speech.Classification;
 import com.study.application.speech.StatusDefinition;
+import com.study.application.leanCloud.FunctionCallback;
 
-public class FunctionActivity extends AppCompatActivity {
+public class FunctionActivity extends AppCompatActivity implements FunctionCallback{
 
     private final String TAG = "FunctionActivity";
     private boolean doubleBackToExitPressedOnce = false;
     FunctionBroadcast funcBroadcast = new FunctionBroadcast();
+    Reader reader;
     Intent intent = new Intent();
     Bundle bundle = new Bundle();
 
@@ -49,6 +55,8 @@ public class FunctionActivity extends AppCompatActivity {
         initView();
         broadcastRegister();
         StatusDefinition.CURRENT_STATUS = StatusDefinition.FUNCTION_SELECT;
+        reader = new Reader(this, ActivityID.FUNCTION_ACTIVITY);
+        reader.checkEstimatedTimeReturn(WelcomeActivity.userName, getString(R.string.status_borrow));
     }
 
     @Override
@@ -148,6 +156,14 @@ public class FunctionActivity extends AppCompatActivity {
         Log.w("TAG", "StatusDefinition : " + StatusDefinition.CURRENT_STATUS);
     }
 
+
+    @Override
+    public void checkEstimatedTimeReturn(String[] dateList, String[] itemList) {
+        for (int i = 0; i < dateList.length; i++)
+            Log.i("TAG", dateList[i] + "  " + itemList[i]);
+    }
+
+
     private class FunctionBroadcast extends BroadcastReceiver{
 
         @Override
@@ -162,4 +178,5 @@ public class FunctionActivity extends AppCompatActivity {
             }
         }
     }
+
 }
