@@ -4,21 +4,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#00897b"
+    android:background="#25A2DC"
     android:orientation="vertical"
     tools:context=".ui.MainActivity"
     tools:layout_editor_absoluteY="25dp">
 
     <ImageView
         android:id="@+id/homeImg"
-        android:layout_width="135dp"
-        android:layout_height="141dp"
-        android:layout_marginBottom="222dp"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_marginBottom="50dp"
         android:layout_marginTop="106dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_home"
+        android:src="@drawable/ic_warehouse"
         app:layout_constraintBottom_toTopOf="@+id/loginBtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

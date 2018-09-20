@@ -13,9 +13,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/warehouse"
+        android:icon="@drawable/ic_warehouse"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/warehouse"
+        android:roundIcon="@drawable/ic_warehouse"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".ui.MainActivity">

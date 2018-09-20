@@ -60,7 +60,8 @@ public class Reader {
             public void done(AVCloudQueryResult avCloudQueryResult, AVException e) {
 
                 for (int i = 0; i < avCloudQueryResult.getResults().size(); i++){
-                    if (!itemArrayList.contains(avCloudQueryResult.getResults().get(i).getString(keyWord)))
+                    if (!itemArrayList.contains(avCloudQueryResult.getResults().get(i).getString(keyWord))
+                            && !avCloudQueryResult.getResults().get(i).getString(keyWord).equals(""))
                         itemArrayList.add(avCloudQueryResult.getResults().get(i).getString(keyWord));
                 }
 
