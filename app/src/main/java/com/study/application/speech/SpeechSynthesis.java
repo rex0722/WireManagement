@@ -19,8 +19,8 @@ public class SpeechSynthesis {
                     if (status == TextToSpeech.SUCCESS){
                         int language = textToSpeech.setLanguage(Locale.TRADITIONAL_CHINESE);
 
-                        if (language == TextToSpeech.LANG_MISSING_DATA || language == TextToSpeech.LANG_NOT_SUPPORTED)
-                            Toast.makeText(MainActivity.mContext, "語音不支持", Toast.LENGTH_SHORT).show();
+//                        if (language == TextToSpeech.LANG_MISSING_DATA || language == TextToSpeech.LANG_NOT_SUPPORTED)
+//                            Toast.makeText(MainActivity.mContext, "語音不支持", Toast.LENGTH_SHORT).show();
                     }else
                         Log.d("TAG","語音合成尚未建立");
             });
