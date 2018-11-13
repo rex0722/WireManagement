@@ -18,22 +18,30 @@
         android:roundIcon="@drawable/ic_warehouse"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.MainActivity">
+        <activity android:name=".ui.MainActivity"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".scanner.ScanQrCodeActivity" />
-        <activity android:name=".ui.WelcomeActivity" />
-        <activity android:name=".ui.FunctionActivity" />
-        <activity android:name="com.google.zxing.activity.CaptureActivity"/>
-
-        <activity android:name=".ui.BorrowActivity" />
-        <activity android:name=".ui.ReturnActivity" />
-        <activity android:name=".ui.SearchActivity" />
-        <activity android:name=".ui.SubscribeActivity"></activity>
+        <activity android:name=".scanner.ScanQrCodeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.WelcomeActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.FunctionActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.google.zxing.activity.CaptureActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.BorrowActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.ReturnActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ui.SubscribeActivity"
+            android:screenOrientation="portrait" />
 
         <service
             android:name=".ui.AutoService"
